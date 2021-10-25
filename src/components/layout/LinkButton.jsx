@@ -6,7 +6,7 @@ function LinkButton({ to, text }) {
     <Link className={styles.btn} to={to}>
       {text}
     </Link>
-  )
+  );
 }
 
 export default LinkButton;
