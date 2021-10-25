@@ -12,7 +12,7 @@
       "id": 1
     },
     {
-      "name": "asfasfasf",
+      "name": "Ola Mundo",
       "budget": "123123",
       "category": {
         "id": "3",
@@ -20,7 +20,7 @@
       },
       "cost": 0,
       "services": [],
-      "id": 3
+      "id": 4
     }
   ],
   "categories": [

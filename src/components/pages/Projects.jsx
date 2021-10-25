@@ -6,6 +6,7 @@ import LinkButton from "../layout/LinkButton";
 import ProjectCard from "../project/ProjectCard";
 import Loading from "../layout/Loading";
 import { useState, useEffect } from "react";
+import { getProjects, deleteProject } from "../controllers/Requests";
 
 function Projects() {
   const [projects, setProjects] = useState([]);
@@ -20,33 +21,24 @@ function Projects() {
 
   useEffect(() => {
     setTimeout(() => {
-      fetch("http://localhost:5000/projects", {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-        },
-      })
-        .then((resp) => resp.json())
-        .then((data) => {
-          setProjects(data);
-          setRemoveLoading(true);
-        })
-        .catch((err) => console.log(err));
+      async function fetchMyAPI() {
+        const result = await getProjects();
+        setProjects(result);
+        setRemoveLoading(true);
+      }
+      fetchMyAPI();
     }, 300);
   }, []);
 
   function removeProject(id, name = "") {
-    fetch(`http://localhost:5000/projects/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then(() => {
+    async function fetchMyAPI() {
+      const result = await deleteProject(id);
+      if (result) {
         setProjects(projects.filter((project) => project.id !== id));
         setMessageProject(`The project ${name} was removed`);
-      })
-      .catch((err) => console.log(err));
+      }
+    }
+    fetchMyAPI();
   }
 
   return (

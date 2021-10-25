@@ -1,6 +1,7 @@
 import style from "./Project.module.css";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { getProject } from "../controllers/Requests";
 
 function Project() {
   const { id } = useParams();
@@ -8,17 +9,11 @@ function Project() {
   const [project, setProject] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/projects/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then((result) => result.json())
-      .then((data) => {
-        setProject(data);
-      })
-      .catch((err) => console.log(err));
+    async function fetchMyAPI() {
+      const result = await getProject(id);
+      setProject(result);
+    }
+    fetchMyAPI();
   }, [id]);
 
   return <p>{project.name}</p>;
