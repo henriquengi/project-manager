@@ -15,7 +15,9 @@ function ProjectCard({ id, name, budget, category, handleRemove }) {
         <Link to="/">
           <BsPencil /> Edit
         </Link>
-        <button><BsTrashFill /> Remove</button>
+        <button>
+          <BsTrashFill /> Remove
+        </button>
       </div>
     </div>
   );

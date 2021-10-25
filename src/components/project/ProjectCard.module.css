@@ -72,11 +72,11 @@
   border: 1px solid #222;
   align-items: center;
   justify-content: center;
-  transition: .5s;
+  transition: 0.5s;
 }
 
 .project_card_actions svg {
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 
 .project_card_actions a:hover,
