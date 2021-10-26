@@ -5,13 +5,14 @@ import { getProject, updateProject } from "../controllers/Requests";
 import Loading from "../layout/Loading";
 import Container from "../layout/Container";
 import ProjectForm from "../project/ProjectForm";
-import Message from "../layout/Message"
+import Message from "../layout/Message";
 
 function Project() {
   const { id } = useParams();
 
   const [project, setProject] = useState([]);
-  const [showProjectform, setShowProjectForm] = useState(false);
+  const [showProjectForm, setshowProjectForm] = useState(false);
+  const [showServiceForm, setShowServiceForm] = useState(false);
   const [message, setMessage] = useState([]);
 
   useEffect(() => {
@@ -23,23 +24,24 @@ function Project() {
   }, [id]);
 
   function toggleProjectForm(project) {
-    setShowProjectForm(!showProjectform);
+    setshowProjectForm(!showProjectForm);
+  }
+
+  function toggleServiceForm(project) {
+    setShowServiceForm(!showServiceForm);
   }
 
   function editPost(project) {
+    setMessage([]);
     if (project.budget < project.cost) {
-      setMessage(["Project cost cant be higher that project budget", "error"])
+      setMessage(["Project cost cant be higher that project budget", "error"]);
       return false;
     }
     async function fetchMyAPI() {
       const result = await updateProject(project);
       setProject(result);
-      setShowProjectForm(false);
-      setMessage(["Project edited", "success"])
-
-      setTimeout(() => {
-        setMessage([])
-      }, 4000);
+      setshowProjectForm(false);
+      setMessage(["Project edited", "success"]);
     }
     fetchMyAPI();
   }
@@ -48,16 +50,14 @@ function Project() {
     <>
       {project.name ? (
         <div className={styles.project_details}>
-          {message[0] && (
-            <Message msg={message[0]} type={message[1]} />
-          )}
+          {message[0] && <Message msg={message[0]} type={message[1]} />}
           <Container customClass="column">
             <div className={styles.details_container}>
               <h1>Project: {project.name}</h1>
               <button onClick={toggleProjectForm} className={styles.btn}>
-                {!showProjectform ? "Edit Project" : "Close"}
+                {!showProjectForm ? "Edit Project" : "Close"}
               </button>
-              {!showProjectform ? (
+              {!showProjectForm ? (
                 <div className={styles.project_info}>
                   <p>
                     <span>Category:</span> {project.category.name}
@@ -79,6 +79,23 @@ function Project() {
                 </div>
               )}
             </div>
+            <div className={styles.service_form_container}>
+              <h2>Add a service</h2>
+              <button onClick={toggleServiceForm} className={styles.btn}>
+                {!showServiceForm ? "Add Service" : "Close"}
+              </button>
+              <div className={styles.project_info}>
+                {showServiceForm && (
+                  <div>
+                    <p>Service Form</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            <h2>Services:</h2>
+            <Container customClass="start">
+              <p>List Services</p>
+            </Container>
           </Container>
         </div>
       ) : (
