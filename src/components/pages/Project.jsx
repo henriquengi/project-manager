@@ -6,6 +6,9 @@ import Loading from "../layout/Loading";
 import Container from "../layout/Container";
 import ProjectForm from "../project/ProjectForm";
 import Message from "../layout/Message";
+import ServiceForm from "../service/ServiceForm";
+import { parse, v4 as uuidv4 } from "uuid";
+import { isEmpty } from "lodash";
 
 function Project() {
   const { id } = useParams();
@@ -29,6 +32,34 @@ function Project() {
 
   function toggleServiceForm(project) {
     setShowServiceForm(!showServiceForm);
+  }
+
+  function createService(project) {
+    setMessage([]);
+    const lastService = project.services[project.services.length - 1];
+    lastService.id = uuidv4();
+
+    const lastServiceCost = lastService.cost;
+    const newCost = parseFloat(project.cost) + parseFloat(lastServiceCost);
+
+    if (newCost > parseFloat(project.budget)) {
+      setMessage(["Over budget!!! Review service value", "error"]);
+      project.services.pop();
+      return false;
+    }
+
+    project.cost = newCost;
+
+    async function updateService(project) {
+      const result = await updateProject(project);
+
+      if (!isEmpty(result)) {
+        setMessage(["Service added", "success"]);
+      } else {
+        setMessage(["Error adding service", "error"]);
+      }
+    }
+    updateService(project);
   }
 
   function editPost(project) {
@@ -86,9 +117,11 @@ function Project() {
               </button>
               <div className={styles.project_info}>
                 {showServiceForm && (
-                  <div>
-                    <p>Service Form</p>
-                  </div>
+                  <ServiceForm
+                    handleSubmit={createService}
+                    btnText="Add service"
+                    projectData={project}
+                  />
                 )}
               </div>
             </div>

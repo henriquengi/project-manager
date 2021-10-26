@@ -7,8 +7,15 @@
         "id": "2",
         "name": "Development"
       },
-      "cost": 0,
-      "services": [],
+      "cost": 122,
+      "services": [
+        {
+          "service": "asfsdf",
+          "cost": "122",
+          "description": "Teste de service",
+          "id": "114395d3-1ab0-477e-9977-218d239ba954"
+        }
+      ],
       "id": 1
     },
     {
