@@ -54,4 +54,27 @@ async function postProjects(project) {
   return result.ok ? result.json() : [].json();
 }
 
-export { getCategories, postProjects, getProject, getProjects, deleteProject };
+//ANCHOR - UPDATE Project
+async function updateProject(project) {
+  let result = await fetch(
+    `${process.env.REACT_APP_CAT_PROJECTS}/${project.id}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(project),
+    }
+  );
+
+  return result.ok ? result.json() : [].json();
+}
+
+export {
+  getCategories,
+  postProjects,
+  getProject,
+  getProjects,
+  deleteProject,
+  updateProject,
+};
