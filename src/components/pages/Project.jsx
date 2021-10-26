@@ -7,7 +7,7 @@ import Container from "../layout/Container";
 import ProjectForm from "../project/ProjectForm";
 import Message from "../layout/Message";
 import ServiceForm from "../service/ServiceForm";
-import { parse, v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { isEmpty } from "lodash";
 import ServiceCard from "../service/ServiceCard";
 
@@ -63,11 +63,30 @@ function Project() {
       }
     }
     updateService(project);
-    showServiceForm(false);
+    setShowServiceForm(false);
   }
 
-  function removeService(id) {
-    return
+  function removeService(id, cost) {
+    setMessage([]);
+    const servicesUpdate = project.services.filter(
+      (service) => service.id !== id
+    );
+
+    const projectUpdated = project;
+    projectUpdated.services = servicesUpdate;
+    projectUpdated.cost = parseFloat(projectUpdated.cost) - parseFloat(cost);
+
+    async function updateService(project) {
+      const result = await updateProject(project);
+      if (!isEmpty(result)) {
+        setProject(result);
+        setServices(result.services);
+        setMessage(["Service removed", "success"]);
+      } else {
+        setMessage(["Error removing service", "error"]);
+      }
+    }
+    updateService(projectUpdated);
   }
 
   function editPost(project) {
@@ -137,7 +156,7 @@ function Project() {
             <Container customClass="start">
               {services.length > 0 ? (
                 services.map((service) => (
-                  <ServiceCard 
+                  <ServiceCard
                     id={service.id}
                     name={service.service}
                     cost={service.cost}
