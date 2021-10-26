@@ -1,13 +1,8 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "./components/pages/Home";
-import Company from "./components/pages/Company";
-import Contact from "./components/pages/Contact";
-import NewProject from "./components/pages/NewProject";
-import Projects from "./components/pages/Projects";
 import Container from "./components/layout/Container";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
-import Project from "./components/pages/Project";
+import RoutePages from "./components/pages/RoutePages";
 
 function App() {
   return (
@@ -15,24 +10,17 @@ function App() {
       <Navbar />
       <Switch>
         <Container customClass="min-height">
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/projects">
-            <Projects />
-          </Route>
-          <Route path="/company">
-            <Company />
-          </Route>
-          <Route path="/newproject">
-            <NewProject />
-          </Route>
-          <Route path="/project/:id">
-            <Project />
-          </Route>
-          <Route path="/contact">
-            <Contact />
-          </Route>
+          {RoutePages.map((routeUnit) => {
+            return routeUnit.exact ? (
+              <Route exact path={routeUnit.name} key={routeUnit.key}>
+                {routeUnit.component}
+              </Route>
+            ) : (
+              <Route path={routeUnit.name} key={routeUnit.key}>
+                {routeUnit.component}
+              </Route>
+            );
+          })}
         </Container>
       </Switch>
       <Footer />
