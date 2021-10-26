@@ -9,11 +9,13 @@ import Message from "../layout/Message";
 import ServiceForm from "../service/ServiceForm";
 import { parse, v4 as uuidv4 } from "uuid";
 import { isEmpty } from "lodash";
+import ServiceCard from "../service/ServiceCard";
 
 function Project() {
   const { id } = useParams();
 
   const [project, setProject] = useState([]);
+  const [services, setServices] = useState([]);
   const [showProjectForm, setshowProjectForm] = useState(false);
   const [showServiceForm, setShowServiceForm] = useState(false);
   const [message, setMessage] = useState([]);
@@ -22,6 +24,7 @@ function Project() {
     async function fetchMyAPI() {
       const result = await getProject(id);
       setProject(result);
+      setServices(result.services);
     }
     fetchMyAPI();
   }, [id]);
@@ -60,6 +63,11 @@ function Project() {
       }
     }
     updateService(project);
+    showServiceForm(false);
+  }
+
+  function removeService(id) {
+    return
   }
 
   function editPost(project) {
@@ -127,7 +135,20 @@ function Project() {
             </div>
             <h2>Services:</h2>
             <Container customClass="start">
-              <p>List Services</p>
+              {services.length > 0 ? (
+                services.map((service) => (
+                  <ServiceCard 
+                    id={service.id}
+                    name={service.service}
+                    cost={service.cost}
+                    description={service.description}
+                    key={service.id}
+                    handleRemove={removeService}
+                  />
+                ))
+              ) : (
+                <p>No registered services</p>
+              )}
             </Container>
           </Container>
         </div>
